@@ -46,9 +46,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.BadLocationException;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -323,10 +321,17 @@ public class PictureController {
     @GetMapping("/tag_category")
     public BaseResponse<PictureTagCategory> listPictureTagCategory() {
         PictureTagCategory pictureTagCategory = new PictureTagCategory();
-        List<String> tagList = Arrays.asList("热门", "搞笑", "生活", "高清", "艺术", "校园", "背景", "简历", "创意");
-        List<String> categoryList = Arrays.asList("模板", "电商", "表情包", "素材", "海报");
+        List<String> tagList = Arrays.asList("摄影", "生活", "游戏", "旅行", "美食");
+
+        HashMap<String,List<String>> tagCategoryMap = new HashMap<>();
+        tagCategoryMap.put("摄影", Arrays.asList("人像", "风景", "街拍","微距","夜景","构图","光影"));
+        tagCategoryMap.put("生活", Arrays.asList("日常", "家居", "极简","自律","治愈"));
+        tagCategoryMap.put("游戏", Arrays.asList("单机", "联机", "电竞","攻略","角色扮演","手游"));
+        tagCategoryMap.put("旅行", Arrays.asList("自由行", "城市漫步", "户外","露营","穷游","徒步"));
+        tagCategoryMap.put("美食", Arrays.asList("探店", "食谱", "烘焙","甜品","家常菜","健康餐","饮品"));
+
         pictureTagCategory.setTagList(tagList);
-        pictureTagCategory.setCategoryList(categoryList);
+        pictureTagCategory.setCategoryList(tagCategoryMap);
         return ResultUtils.success(pictureTagCategory);
     }
     /**

@@ -2,6 +2,7 @@ package com.vs.vspicturebackend.model.vo;
 
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,5 +19,5 @@ public class PictureTagCategory {
     /**
      * 分类列表
      */
-    private List<String> categoryList;
+    private HashMap<String,List<String>> categoryList;
 }
