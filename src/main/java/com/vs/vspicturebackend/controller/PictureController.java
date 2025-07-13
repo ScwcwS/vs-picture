@@ -3,6 +3,7 @@ package com.vs.vspicturebackend.controller;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 
@@ -196,6 +197,9 @@ public class PictureController {
         List<String> permissionList = spaceUserAuthManager.getPermissionList(space, loginUser);
         PictureVO pictureVO = pictureService.getPictureVO(picture, request);
         pictureVO.setPermissionList(permissionList);
+        // 更新数据库中图片点击次数
+        pictureService.update(new UpdateWrapper<Picture>().eq("id", id).setSql("clickNumber = clickNumber + 1"));
+
         // 获取封装类
         return ResultUtils.success(pictureService.getPictureVO(picture,request));
     }
@@ -321,14 +325,16 @@ public class PictureController {
     @GetMapping("/tag_category")
     public BaseResponse<PictureTagCategory> listPictureTagCategory() {
         PictureTagCategory pictureTagCategory = new PictureTagCategory();
-        List<String> tagList = Arrays.asList("摄影", "生活", "游戏", "旅行", "美食");
+        List<String> tagList = Arrays.asList("摄影", "生活", "游戏", "旅行", "美食","健身","体育");
 
         HashMap<String,List<String>> tagCategoryMap = new HashMap<>();
-        tagCategoryMap.put("摄影", Arrays.asList("人像", "风景", "街拍","微距","夜景","构图","光影"));
+        tagCategoryMap.put("摄影", Arrays.asList("人像", "风景", "街拍","微距","夜景","构图","光影","慢门"));
         tagCategoryMap.put("生活", Arrays.asList("日常", "家居", "极简","自律","治愈"));
         tagCategoryMap.put("游戏", Arrays.asList("单机", "联机", "电竞","攻略","角色扮演","手游"));
         tagCategoryMap.put("旅行", Arrays.asList("自由行", "城市漫步", "户外","露营","穷游","徒步"));
         tagCategoryMap.put("美食", Arrays.asList("探店", "食谱", "烘焙","甜品","家常菜","健康餐","饮品"));
+        tagCategoryMap.put("健身", Arrays.asList("引体", "卧推", "有氧","深蹲","飞鸟","俯卧撑","弯举"));
+        tagCategoryMap.put("体育", Arrays.asList("羽毛球", "篮球", "乒乓球","跑步","排球"));
 
         pictureTagCategory.setTagList(tagList);
         pictureTagCategory.setCategoryList(tagCategoryMap);

@@ -193,6 +193,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 转换为标准颜色
         picture.setPicColor(ColorTransformUtils.getStandardColor(uploadPictureResult.getPicColor()));
         picture.setUserId(loginUser.getId());
+        picture.setClickNumber(0);
         // 补充审核参数
         this.fillReviewParams(picture,loginUser);
 //        // 如果是空间上传 默认审核通过

@@ -119,3 +119,44 @@ create table if not exists space_user
     INDEX idx_spaceId (spaceId),                    -- 提升按空间查询的性能
     INDEX idx_userId (userId)                       -- 提升按用户查询的性能
 ) comment '空间用户关联' collate = utf8mb4_unicode_ci;
+
+-- 扩展用户表：新增会员功能
+ALTER TABLE user
+    ADD COLUMN vipExpireTime datetime NULL COMMENT '会员过期时间',
+    ADD COLUMN vipCode varchar(128) NULL COMMENT '会员兑换码',
+    ADD COLUMN vipNumber bigint NULL COMMENT '会员编号';
+
+ALTER TABLE picture
+    ADD COLUMN clickNumber bigint DEFAULT 0 NOT NULL COMMENT '点击次数' AFTER isDelete;
+
+CREATE TABLE IF NOT EXISTS system_log (
+                                          id BIGINT AUTO_INCREMENT COMMENT '日志ID' PRIMARY KEY,
+                                          user_id BIGINT COMMENT '操作人ID（系统操作可为NULL）',
+                                          content TEXT NOT NULL COMMENT '日志内容',
+                                          create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                          update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                          INDEX idx_user_id (user_id),          -- 按用户ID查询
+                                          INDEX idx_create_time (create_time)   -- 按时间查询
+) COMMENT '系统日志表' COLLATE = utf8mb4_unicode_ci;
+
+ALTER TABLE system_log
+    ADD COLUMN viewed_by JSON COMMENT '存储已查看该日志的用户ID数组，格式如：[100, 101, 102]';
+
+
+
+alter table system_log
+    change user_id userId bigint null comment '操作人ID（系统操作可为NULL）';
+
+alter table system_log
+    change create_time createTime datetime default CURRENT_TIMESTAMP null comment '创建时间';
+
+alter table system_log
+    change update_time updateTime datetime default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '修改时间';
+
+alter table system_log
+    change viewed_by viewedBy json null comment '存储已查看该日志的用户ID数组，格式如：[100, 101, 102]';
+
+ALTER TABLE system_log
+    MODIFY COLUMN viewedBy JSON COMMENT '存储用户查看记录，格式：{"用户ID": "查看时间"}';
+
+

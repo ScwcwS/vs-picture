@@ -122,6 +122,10 @@ public class Picture implements Serializable {
      * 审核时间
      */
     private Date reviewTime;
+    /**
+     * 点击次数
+     */
+    private Integer clickNumber;
 
     /**
      * 是否删除

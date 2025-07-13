@@ -110,6 +110,11 @@ public class PictureVO implements Serializable {
     private UserVO user;
 
     /**
+     * 点击数
+     */
+    private Integer clickNumber;
+
+    /**
      * 权限列表
      */
     private List<String> permissionList = new ArrayList<>();
